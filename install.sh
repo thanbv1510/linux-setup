@@ -10,12 +10,13 @@ echo -e "# /** Fix bug never die :)
 
 # Variable config
 disk='/dev/sda'
-boot_partition="${disk}/1"
-swap_partition="${disk}/2"
-root_partition="${disk}/3"
+boot_partition="${disk}1"
+swap_partition="${disk}2"
+root_partition="${disk}3"
 swap_size='8' # in GiB
 
 # Set up network connection
+echo "==> Check network connection ..."
 res=`ping github.com -c 1 -q -W 2 -w 2 | grep '1 packets transmitted, 1 received, 0% packet loss' | wc -l`
 #echo ">>> $res"
 if [ "$res" -eq "1" ]
@@ -25,6 +26,7 @@ else
 	echo "please connect Wifi use iwctl"
 	exit
 fi
+echo "==> Check network connection done!"
 
 # Filesystem mount warning
 echo "This script will create and format the partitions as follows:"
@@ -40,48 +42,51 @@ then
 fi
 
 # Create the partitions
+echo "==> Create the partitions ..."
 sed -e 's/\s*\([\+0-9a-zA-Z]*\).*/\1/' << EOF | fdisk "$disk"
-o # clear the in memory partition table
+g
 n # new partition
-p # primary partition
 1 # partition number 1
 # default - start at beginning of disk 
 +512M # 512 MB boot parttion
 n # new partition
-p # primary partition
 2 # partion number 2
 # default, start immediately after preceding partition
-+"$swap_size"G # 8 GB swap parttion
++8G # 8 GB swap parttion
 n # new partition
-p # primary partition
 3 # partion number 3
 # default, start immediately after preceding partition
 # default, extend partition to end of disk
-a # make a partition bootable
-1 # bootable partition is partition 1 -- /dev/sda1
-p # print the in-memory partition table
+t
+1
+1
 w # write the partition table
 q # and we're done
 EOF
+echo "==> Create the partitions done!"
 
 # Format the partitions
+echo "==> Format the partitions ..."
 mkfs.fat -F32 $boot_partition
 mkswap $swap_partition
 mkfs.ext4 $root_partition
+echo "==> Format the partitions done!"
 
 # Mount the partitions
+echo "==> Mount the partitions ..."
 mount $root_partition /mnt
 swapon $swap_partition
 mkdir /mnt/boot
 mount $boot_partition /mnt/boot
+echo "==> Mount the partitions done!"
 
 # Setup time
 timedatectl set-ntp true
 
 # Install Arch linux
-echo "Setup done. Starting install..."
-echo "Install Arch linux and package: sudo, vi, vim"
-pacstrap /mnt base linux linux-firmware sudo vi vim
+echo "Setup done. Starting install ..."
+echo "Install Arch linux and package: sudo"
+pacstrap /mnt base base-devel linux linux-firmware sudo
 
 # Generate fstab
 genfstab -U /mnt >> /mnt/etc/fstab
@@ -91,6 +96,6 @@ if [[ ! -f chroot.sh ]]; then
 	curl -0 https://raw.githubusercontent.com/thanbv1510/linux-setup/master/chroot.sh --output chroot.sh
 fi
 
-cp -rfv chroot.sh /mnt/root
-chmod +x /mnt/root/chroot.sh
+cp -rfv chroot.sh /mnt
+chmod +x /mnt/chroot.sh
 arch-chroot /mnt /chroot.sh

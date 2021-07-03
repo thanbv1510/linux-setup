@@ -10,7 +10,7 @@ echo -e "# /** Fix bug never die :)
 
 # Variable config
 disk='/dev/sda'
-root_partition="${disk}/3"
+root_partition="${disk}3"
 hostname='arch-linux' 
 username='thanbv1510'
 fullname='Than Bui'
@@ -35,13 +35,13 @@ echo "$hostname" > /etc/hostname
 echo "127.0.1.1 localhost.localdomain $hostname" >> /etc/hosts
 
 # Network manager
-pacman -S networkmanager
+pacman -S networkmanager --noconfirm
 systemctl enable NetworkManager
 
 # Root password
-echo "Set root password:"
+echo "==> Set root password:"
 passwd
-echo "Set root password done!"
+echo "==> Set root password done!"
 
 # Install Boot loader
 bootctl --path=/boot install
@@ -59,13 +59,13 @@ echo "options root=$root_partition rw quiet" >> /boot/loader/entries/arch.conf
 
 # Add user
 useradd -m -G wheel -s /bin/bash -c "$fullname" "$username"
-echo "Set user password:"
+echo "==> Set user password:"
 passwd "$username"
-echo "Set user password done!"
+echo "==> Set user password done!"
 
 # Allow users in group wheel to use sudo
 sed -i '/%wheel\sALL=(ALL)\sALL/s/^#\s//g' /etc/sudoers
 
 # Cleanup
-rm /chroot.sh
+rm chroot.sh
 exit
