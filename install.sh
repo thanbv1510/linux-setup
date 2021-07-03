@@ -93,7 +93,7 @@ genfstab -U /mnt >> /mnt/etc/fstab
 
 if [[ ! -f chroot.sh ]]; then
 	echo "Missing chroot.sh, Downloading..."
-	curl -0 https://raw.githubusercontent.com/thanbv1510/linux-setup/master/chroot.sh --output chroot.sh
+	curl -O https://raw.githubusercontent.com/thanbv1510/linux-setup/master/chroot.sh
 fi
 
 cp -rfv chroot.sh /mnt
