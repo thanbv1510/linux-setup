@@ -11,7 +11,7 @@ echo -e "# /** Fix bug never die :)
 # Variable config
 disk='/dev/sda'
 root_partition="${disk}3"
-hostname='arch-linux' 
+hostname='arch-linux'
 username='thanbv1510'
 fullname='Than Bui'
 
@@ -26,17 +26,26 @@ sed -i '/en_US.UTF-8 UTF-8/s/^#//g' /etc/locale.gen
 locale-gen
 
 # Create the locale.conf file, and set the LANG variable
-echo "LANG=en_US.UTF-8" > /etc/locale.conf
+echo "LANG=en_US.UTF-8" >/etc/locale.conf
 
 # Create the hostname file
-echo "$hostname" > /etc/hostname
+echo "$hostname" >/etc/hostname
 
 # Add matching entries to hosts
-echo "127.0.1.1 localhost.localdomain $hostname" >> /etc/hosts
+echo "127.0.1.1 localhost.localdomain $hostname" >>/etc/hosts
 
 # Network manager
-pacman -S networkmanager --noconfirm
+sudo pacman -S networkmanager --noconfirm
 systemctl enable NetworkManager
+
+package=networkmanager
+if pacman -Qs networkmanager >/dev/null; then
+  echo "==> The package $package is installed"
+else
+  echo "The package $package is not installed"
+  sudo pacman -S networkmanager
+  systemctl enable NetworkManager
+fi
 
 # Root password
 echo "==> Set root password:"
@@ -47,15 +56,15 @@ echo "==> Set root password done!"
 bootctl --path=/boot install
 
 # Edit the loader.conf file
-echo 'default arch' > /boot/loader/loader.conf
-echo 'timeout 0' >> /boot/loader/loader.conf
-echo 'editor  0' >> /boot/loader/loader.conf
+echo 'default arch' >/boot/loader/loader.conf
+echo 'timeout 0' >>/boot/loader/loader.conf
+echo 'editor  0' >>/boot/loader/loader.conf
 
 # Create the arch.conf file in the entries directory and Edit the details for the arch.conf file
-echo 'title   Arch Linux' > /boot/loader/entries/arch.conf
-echo 'linux   /vmlinuz-linux' >> /boot/loader/entries/arch.conf
-echo 'initrd  /initramfs-linux.img' >> /boot/loader/entries/arch.conf
-echo "options root=$root_partition rw quiet" >> /boot/loader/entries/arch.conf
+echo 'title   Arch Linux' >/boot/loader/entries/arch.conf
+echo 'linux   /vmlinuz-linux' >>/boot/loader/entries/arch.conf
+echo 'initrd  /initramfs-linux.img' >>/boot/loader/entries/arch.conf
+echo "options root=$root_partition rw quiet" >>/boot/loader/entries/arch.conf
 
 # Add user
 useradd -m -G wheel -s /bin/bash -c "$fullname" "$username"

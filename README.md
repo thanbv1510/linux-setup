@@ -46,6 +46,8 @@ chmod +x config.sh
 - **Docker**- docker, docker-compose
 - **Java** - jdk8-openjdk, jdk11-openjdk, jdk-openjdk
 - **dbeaver**
+- **i3lock**
+
 ### AUR package
 - **drawio-desktop**
 - **intellij-idea-ultimate-edition**
@@ -53,3 +55,4 @@ chmod +x config.sh
 - **ibus-bamboo**
 - **Polybar**
 - **robo3t-bin**
+- **wps-office**

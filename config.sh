@@ -8,17 +8,21 @@ echo -e "# /** Fix bug never die :)
 #     |_|    |_|  |_| /_/    \_\ |_|  \__|
 # */\n"
 
-# Update package
-pacman -Syyu git --noconfirm
+# Variable config
+disk='/dev/sda'
+root_partition="${disk}3"
 
-# Intall yay
+# Update package
+sudo pacman -Syyu git --noconfirm
+
+# Install yay
 git clone https://aur.archlinux.org/yay.git
-cd yay
+cd yay || exit
 makepkg -si --noconfirm
 cd .. && rm -rf yay/
 
-# Install Offical package
-pacman -S \
+# Install Official package
+sudo pacman -S \
 xorg-server \
 xorg-xinit \
 xorg-xsetroot \
@@ -50,19 +54,21 @@ docker \
 docker-compose \
 jdk8-openjdk jdk11-openjdk jdk-openjdk \
 dbeaver \
+intel-ucode \
+i3lock \
 --noconfirm
 
 # Install AUR package
-yay -S drawio-desktop intellij-idea-ultimate-edition postman-bin ibus-bamboo polybar robo3t-bin
+yay -S drawio-desktop intellij-idea-ultimate-edition postman-bin ibus-bamboo polybar robo3t-bin wps-office
 
-### Setup docker
+# Setup docker
 systemctl start docker.service
 
 groupadd docker
 gpasswd -a thanbv1510 docker
 
-### Setup JDK
-archlinux-java set java-11-openjdk # Because some app need java > 8
+# Setup JDK
+sudo archlinux-java set java-11-openjdk # Because some app need java > 8
 
 # Apply config
 git clone https://github.com/thanbv1510/dotfiles.git
@@ -72,5 +78,24 @@ cp dotfiles/.gitconfig ~/ -r
 cp dotfiles/.xinitrc ~/ -r
 
 rm -rf dotfiles/
-rm -rf config.sh
+rm config.sh
+
+# Install Linux LTS
+sudo pacman -S linux-lts linux-lts-headers --noconfirm
+
+# Uninstall Linux
+sudo pacman -Rs linux --noconfirm
+
+# ReConfig file
+echo 'title   Arch Linux' | sudo tee /boot/loader/entries/arch.conf
+echo 'linux   /vmlinuz-linux-lts' | sudo tee -a  /boot/loader/entries/arch.conf
+echo 'initrd /intel-ucode.img' | sudo tee -a /boot/loader/entries/arch.conf
+echo 'initrd  /initramfs-linux-lts.img' | sudo tee -a /boot/loader/entries/arch.conf
+echo "options root=$root_partition rw quiet" | sudo tee -a /boot/loader/entries/arch.conf
+
+# Remove unused packaged and Clean cache
+sudo pacman -Rns $(pacman -Qtdq)
+rm -rf ~/.cache/*
+
+# Start BSPWM
 startx
