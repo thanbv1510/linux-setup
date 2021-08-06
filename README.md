@@ -41,18 +41,15 @@ chmod +x config.sh
 - **papirus-icon-theme** - icon
 - **lxappearance** - Change theme
 - **materia-gtk-theme** - theme
-- **code** - visual studio code
 - **Fonts** - noto-fonts ttf-ubuntu-font-family ttf-dejavu ttf-freefont ttf-liberation ttf-droid ttf-inconsolata ttf-roboto terminus-font ttf-font-awesome ttf-anonymous-pro ttf-jetbrains-mono
 - **Docker**- docker, docker-compose
 - **Java** - jdk8-openjdk, jdk11-openjdk, jdk-openjdk
-- **dbeaver**
 - **i3lock**
 
 ### AUR package
-- **drawio-desktop**
 - **intellij-idea-ultimate-edition**
 - **postman-bin**
 - **ibus-bamboo**
 - **Polybar**
-- **robo3t-bin**
 - **wps-office**
+- **visual-studio-code-bin**

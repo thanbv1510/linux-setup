@@ -36,16 +36,17 @@ echo "127.0.1.1 localhost.localdomain $hostname" >>/etc/hosts
 
 # Network manager
 sudo pacman -S networkmanager --noconfirm
-systemctl enable NetworkManager
 
 package=networkmanager
 if pacman -Qs networkmanager >/dev/null; then
   echo "==> The package $package is installed"
 else
-  echo "The package $package is not installed"
+  echo "<== The package $package is not installed"
   sudo pacman -S networkmanager
-  systemctl enable NetworkManager
 fi
+
+# Setup Network manager
+systemctl enable NetworkManager
 
 # Root password
 echo "==> Set root password:"
