@@ -30,12 +30,14 @@ sudo pacman -S \
   xf86-video-intel \
   bspwm \
   sxhkd \
-  terminator \
+  kitty \
   rofi \
   htop \
   neofetch \
   firefox-developer-edition \
   alsa-utils \
+  pulseaudio \
+  pulseaudio-alsa \
   picom \
   maim \
   xclip \
@@ -57,7 +59,7 @@ sudo pacman -S \
   --noconfirm
 
 # Install AUR package
-yay -S intellij-idea-ultimate-edition postman-bin ibus-bamboo polybar wps-office visual-studio-code-bin
+yay -S intellij-idea-ultimate-edition postman-bin ibus-bamboo polybar wps-office visual-studio-code-bin golan
 
 # Setup docker
 systemctl start docker.service
