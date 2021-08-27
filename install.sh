@@ -61,6 +61,7 @@ w # write the partition table
 q # and we're done
 EOF
 echo "==> Create the partitions done!"
+sleep 10
 
 # Format the partitions
 echo "==> Format the partitions ..."
@@ -68,6 +69,7 @@ mkfs.fat -F32 $boot_partition
 mkswap $swap_partition
 mkfs.ext4 $root_partition
 echo "==> Format the partitions done!"
+sleep 10
 
 # Mount the partitions
 echo "==> Mount the partitions ..."
@@ -76,6 +78,7 @@ swapon $swap_partition
 mkdir /mnt/boot
 mount $boot_partition /mnt/boot
 echo "==> Mount the partitions done!"
+sleep 10
 
 # Setup time
 timedatectl set-ntp true
@@ -84,6 +87,7 @@ timedatectl set-ntp true
 echo "Setup done. Starting install ..."
 echo "Install Arch linux and package: sudo"
 pacstrap /mnt base base-devel linux linux-firmware sudo
+sleep 10
 
 # Generate fstab
 genfstab -U /mnt >>/mnt/etc/fstab
@@ -92,7 +96,9 @@ if [[ ! -f chroot.sh ]]; then
   echo "Missing chroot.sh, Downloading..."
   curl -O https://raw.githubusercontent.com/thanbv1510/linux-setup/master/chroot.sh
 fi
+sleep 10
 
 cp -rfv chroot.sh /mnt
 chmod +x /mnt/chroot.sh
 arch-chroot /mnt /chroot.sh
+sleep 10
