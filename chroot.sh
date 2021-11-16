@@ -11,7 +11,7 @@ echo -e "# /** Fix bug never die :)
 # Variable config
 disk='/dev/sda'
 root_partition="${disk}3"
-hostname='arch-linux'
+hostname='my-linux'
 username='thanbv1510'
 fullname='Than Bui'
 
@@ -36,7 +36,6 @@ echo "127.0.1.1 localhost.localdomain $hostname" >>/etc/hosts
 
 # Network manager
 sudo pacman -S networkmanager --noconfirm
-sleep 10
 
 package=networkmanager
 if pacman -Qs networkmanager >/dev/null; then
@@ -45,7 +44,6 @@ else
   echo "<== The package $package is not installed"
   sudo pacman -S networkmanager
 fi
-sleep 10
 
 # Setup Network manager
 systemctl enable NetworkManager
@@ -57,7 +55,6 @@ echo "==> Set root password done!"
 
 # Install Boot loader
 bootctl --path=/boot install
-sleep 10
 
 # Edit the loader.conf file
 echo 'default arch' >/boot/loader/loader.conf

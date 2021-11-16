@@ -14,14 +14,12 @@ root_partition="${disk}3"
 
 # Update package
 sudo pacman -Syyu git --noconfirm
-sleep 10
 
 # Install yay
 git clone https://aur.archlinux.org/yay.git
 cd yay || exit
 makepkg -si --noconfirm
 cd .. && rm -rf yay/
-sleep 10
 
 # Install Official package
 sudo pacman -S \
@@ -32,7 +30,7 @@ sudo pacman -S \
   xf86-video-intel \
   bspwm \
   sxhkd \
-  kitty \
+  alacritty \
   rofi \
   htop \
   neofetch \
@@ -48,7 +46,7 @@ sudo pacman -S \
   feh \
   ranger \
   vlc \
-  thunar \
+  nemo \
   papirus-icon-theme \
   lxappearance \
   materia-gtk-theme \
@@ -60,20 +58,26 @@ sudo pacman -S \
   i3lock \
   bluez \
   bluez-utils \
+  nodejs \
+  npm \
+  yarn \
   --noconfirm
-  sleep 10
 
 # Install AUR package
-yay -S intellij-idea-ultimate-edition postman-bin ibus-bamboo polybar wps-office visual-studio-code-bin golan
-sleep 10
+yay -S --noconfirm intellij-idea-ultimate-edition \
+  postman-bin \
+  ibus-bamboo \
+  polybar \
+  wps-office \
+  visual-studio-code-bin \
+  goland \
+  webstorm
 
 # Setup docker
 systemctl start docker.service
-sleep 5
 
 groupadd docker
 gpasswd -a thanbv1510 docker
-sleep 10
 
 # Setup bluetooth
 sudo systemctl start bluetooth.service
@@ -82,25 +86,26 @@ sudo systemctl enable bluetooth.service
 # Setup JDK
 sudo archlinux-java set java-11-openjdk # Because some app need java > 8
 
+# update NPM and Install and Upgrade Vue CLI
+sudo npm i -g npm
+yarn global add @vue/cli
+yarn global upgrade --latest @vue/cli
+
 # Apply config
 git clone https://github.com/thanbv1510/dotfiles.git
 cp dotfiles/.config ~/.config -r
 sudo cp dotfiles/etc/X11/xorg.conf.d/* /etc/X11/xorg.conf.d/
 cp dotfiles/.gitconfig ~/ -r
 cp dotfiles/.xinitrc ~/ -r
-sleep 10
 
 rm -rf dotfiles/
 rm config.sh
-sleep 10
 
 # Install Linux LTS
 sudo pacman -S linux-lts linux-lts-headers --noconfirm
-sleep 10
 
 # Uninstall Linux
 sudo pacman -Rs linux --noconfirm
-sleep 5
 
 # ReConfig file
 echo 'title Arch Linux (LTS)' | sudo tee /boot/loader/entries/arch.conf
@@ -108,12 +113,10 @@ echo 'linux /vmlinuz-linux-lts' | sudo tee -a /boot/loader/entries/arch.conf
 echo 'initrd /intel-ucode.img' | sudo tee -a /boot/loader/entries/arch.conf
 echo 'initrd /initramfs-linux-lts.img' | sudo tee -a /boot/loader/entries/arch.conf
 echo "options root=$root_partition rw quiet" | sudo tee -a /boot/loader/entries/arch.conf
-sleep 5
 
 # Remove unused packaged and Clean cache
 sudo pacman -Rns $(pacman -Qtdq)
 rm -rf ~/.cache/*
-sleep 10
 
 # Start BSPWM
 startx
