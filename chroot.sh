@@ -42,11 +42,12 @@ if pacman -Qs networkmanager >/dev/null; then
   echo "==> The package $package is installed"
 else
   echo "<== The package $package is not installed"
-  sudo pacman -S networkmanager
+  sudo pacman -S networkmanager --noconfirm
 fi
 
 # Setup Network manager
 systemctl enable NetworkManager
+echo "==> Setup Network manager done!"
 
 # Root password
 echo "==> Set root password:"
@@ -66,6 +67,7 @@ echo 'title   Arch Linux' >/boot/loader/entries/arch.conf
 echo 'linux   /vmlinuz-linux' >>/boot/loader/entries/arch.conf
 echo 'initrd  /initramfs-linux.img' >>/boot/loader/entries/arch.conf
 echo "options root=$root_partition rw quiet" >>/boot/loader/entries/arch.conf
+echo "==> Setup bootloader done!"
 
 # Add user
 useradd -m -G wheel -s /bin/bash -c "$fullname" "$username"
@@ -75,7 +77,12 @@ echo "==> Set user password done!"
 
 # Allow users in group wheel to use sudo
 sed -i '/%wheel\sALL=(ALL)\sALL/s/^#\s//g' /etc/sudoers
+echo "==> Setup new user done!"
 
 # Cleanup
+rm install.sh
 rm chroot.sh
+
+echo "$ umount -R /mnt"
+echo "$ reboot"
 exit

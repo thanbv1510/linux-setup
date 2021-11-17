@@ -27,6 +27,8 @@ sudo pacman -S \
   xorg-xinit \
   xorg-xsetroot \
   xorg-xbacklight \
+  xorg-xrandr \
+  autorandr \
   xf86-video-intel \
   bspwm \
   sxhkd \
@@ -48,7 +50,6 @@ sudo pacman -S \
   vlc \
   nemo \
   papirus-icon-theme \
-  lxappearance \
   materia-gtk-theme \
   noto-fonts ttf-ubuntu-font-family ttf-dejavu ttf-freefont ttf-liberation ttf-droid ttf-inconsolata ttf-roboto terminus-font ttf-font-awesome ttf-anonymous-pro ttf-jetbrains-mono \
   docker \
@@ -61,6 +62,7 @@ sudo pacman -S \
   nodejs \
   npm \
   yarn \
+  libreoffice-still \
   --noconfirm
 
 # Install AUR package
@@ -68,7 +70,6 @@ yay -S --noconfirm intellij-idea-ultimate-edition \
   postman-bin \
   ibus-bamboo \
   polybar \
-  wps-office \
   visual-studio-code-bin \
   goland \
   webstorm
@@ -113,6 +114,10 @@ echo 'linux /vmlinuz-linux-lts' | sudo tee -a /boot/loader/entries/arch.conf
 echo 'initrd /intel-ucode.img' | sudo tee -a /boot/loader/entries/arch.conf
 echo 'initrd /initramfs-linux-lts.img' | sudo tee -a /boot/loader/entries/arch.conf
 echo "options root=$root_partition rw quiet" | sudo tee -a /boot/loader/entries/arch.conf
+
+chmod +x .config/polybar/launch.sh
+chmod +x .config/bspwm/startup
+chmod +x .config/autorandr/postswitch
 
 # Remove unused packaged and Clean cache
 sudo pacman -Rns $(pacman -Qtdq)
