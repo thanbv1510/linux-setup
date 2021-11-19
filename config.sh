@@ -63,6 +63,7 @@ sudo pacman -S \
   npm \
   yarn \
   libreoffice-still \
+  neovim \
   --noconfirm
 
 # Install AUR package
@@ -94,10 +95,12 @@ yarn global upgrade --latest @vue/cli
 
 # Apply config
 git clone https://github.com/thanbv1510/dotfiles.git
-cp dotfiles/.config ~/.config -r
+cp dotfiles/.config/* ~/.config/ -r
 sudo cp dotfiles/etc/X11/xorg.conf.d/* /etc/X11/xorg.conf.d/
 cp dotfiles/.gitconfig ~/ -r
 cp dotfiles/.xinitrc ~/ -r
+cp dotfiles/.bashrc ~/.bashrc
+source ~/.bashrc
 
 rm -rf dotfiles/
 rm config.sh
@@ -118,6 +121,11 @@ echo "options root=$root_partition rw quiet" | sudo tee -a /boot/loader/entries/
 chmod +x .config/polybar/launch.sh
 chmod +x .config/bspwm/startup
 chmod +x .config/autorandr/postswitch
+
+autorandr --load docked
+autorandr --load undocked
+
+nvim +PlugInstall +qall >/dev/null 2>&1
 
 # Remove unused packaged and Clean cache
 sudo pacman -Rns $(pacman -Qtdq)
